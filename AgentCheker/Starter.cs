@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AgentCheker
 {
-    internal class Program
+    internal static class Starter
     {
-        public static void Main(string[] args)
-        {
-            Starter.Run();
+        public static void Run()
+        { 
+        
         }
     }
 }
