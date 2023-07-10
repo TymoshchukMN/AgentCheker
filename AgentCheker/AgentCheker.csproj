@@ -50,6 +50,7 @@
     <Compile Include="DataBase\DateBase.cs" />
     <Compile Include="DataBase\DBConfig.cs" />
     <Compile Include="Encryption\Decrypt.cs" />
+    <Compile Include="JSON\Config.cs" />
     <Compile Include="JSON\DBConfigJSON.cs" />
     <Compile Include="JSON\MailConfigJSON.cs" />
     <Compile Include="Mail\Email.cs" />

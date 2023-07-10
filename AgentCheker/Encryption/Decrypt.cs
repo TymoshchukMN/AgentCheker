@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AgentCheker.Encription
 {
@@ -13,7 +10,7 @@ namespace AgentCheker.Encription
         public static string DecryptCipherTextToPlainText(string cipherText)
         {
             const string KeyPath = "N:\\Personal\\TymoshchukMN\\" +
-                "TitleProcessingConfigs\\SecurityKey.txt";
+                "\\AgentCheker\\SecurityKey.txt";
 
             byte[] toEncryptArray = Convert.FromBase64String(cipherText);
             MD5CryptoServiceProvider objMD5CryptoService

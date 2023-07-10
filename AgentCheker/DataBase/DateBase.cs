@@ -18,14 +18,15 @@ namespace AgentCheker.DataBase
             string server,
             string userName,
             string dataBase,
-            int port)
+            int port,
+            string pass)
         {
             _connectionString = string.Format(
                     $"Server={server};" +
                     $"Username={userName};" +
                     $"Database={dataBase};" +
                     $"Port={port};" +
-                    $"Password={string.Empty}");
+                    $"Password={pass}");
         }
 
         #endregion CTORs

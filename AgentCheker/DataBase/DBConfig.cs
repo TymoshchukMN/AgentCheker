@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AgentCheker.DataBase
+﻿namespace AgentCheker.DataBase
 {
     public class DBConfig
     {
@@ -15,5 +9,7 @@ namespace AgentCheker.DataBase
         public string DBname { get; set; }
 
         public string UserName { get; set; }
+
+        public string Pass { get; set; }
     }
 }
