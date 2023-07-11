@@ -49,10 +49,15 @@
   <ItemGroup>
     <Compile Include="DataBase\DateBase.cs" />
     <Compile Include="DataBase\DBConfig.cs" />
+    <Compile Include="JSON\LoggerConfig.cs" />
+    <Compile Include="Logger\DateProvider\FileService.cs" />
     <Compile Include="Encryption\Decrypt.cs" />
+    <Compile Include="Logger\Enums\MessageType.cs" />
+    <Compile Include="Interfaces\IDataProvider.cs" />
     <Compile Include="JSON\Config.cs" />
     <Compile Include="JSON\DBConfigJSON.cs" />
     <Compile Include="JSON\MailConfigJSON.cs" />
+    <Compile Include="Logger\Logger.cs" />
     <Compile Include="Mail\Email.cs" />
     <Compile Include="Mail\MailConfig.cs" />
     <Compile Include="Program.cs" />
@@ -67,8 +72,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
