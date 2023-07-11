@@ -1,6 +1,6 @@
 ﻿namespace AgentCheker.Interfaces
 {
-    using AgentCheker.Logger;
+    using AgentCheker.Log;
 
     public interface IDataProvider
     {

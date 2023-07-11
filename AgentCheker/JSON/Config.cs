@@ -1,7 +1,7 @@
 ﻿namespace AgentCheker.Json
 {
     using AgentCheker.DataBase;
-    using AgentCheker.Logger;
+    using AgentCheker.Log;
     using AgentCheker.Mail;
 
     public class Config

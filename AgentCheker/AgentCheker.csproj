@@ -50,14 +50,14 @@
     <Compile Include="DataBase\DateBase.cs" />
     <Compile Include="DataBase\DBConfig.cs" />
     <Compile Include="JSON\LoggerConfig.cs" />
-    <Compile Include="Logger\DateProvider\FileService.cs" />
+    <Compile Include="Log\DateProvider\FileService.cs" />
     <Compile Include="Encryption\Decrypt.cs" />
-    <Compile Include="Logger\Enums\MessageType.cs" />
+    <Compile Include="Log\Enums\MessageType.cs" />
     <Compile Include="Interfaces\IDataProvider.cs" />
     <Compile Include="JSON\Config.cs" />
     <Compile Include="JSON\DBConfigJSON.cs" />
     <Compile Include="JSON\MailConfigJSON.cs" />
-    <Compile Include="Logger\Logger.cs" />
+    <Compile Include="Log\Logger.cs" />
     <Compile Include="Mail\Email.cs" />
     <Compile Include="Mail\MailConfig.cs" />
     <Compile Include="Program.cs" />

@@ -1,20 +1,23 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IO;
-using AgentCheker.DataBase;
-using AgentCheker.Encription;
-using AgentCheker.Json;
-using AgentCheker.Mail;
-using Newtonsoft.Json;
-
-namespace AgentCheker
+﻿namespace AgentCheker
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Data.SqlClient;
+    using System.IO;
+    using AgentCheker.DataBase;
+    using AgentCheker.Encription;
+    using AgentCheker.Json;
+    using AgentCheker.Log;
+    using AgentCheker.Mail;
+    using Newtonsoft.Json;
+
     internal static class Starter
     {
         public static void Run()
         {
+            Logger logger = Logger.GetInstatce();
+
             const string MAIL_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
                 "AgentCheker\\MailConfigFile.json";
 
