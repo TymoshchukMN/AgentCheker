@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using AgentCheker.Log;
-using AgentCheker.Log.Enums;
-using AgentCheker.Mail;
-
-namespace AgentCheker.DataBase
+﻿namespace AgentCheker.DataBase
 {
+    using AgentCheker.DataBase.Enums;
+
     public class DateBaseDC : DateBase
     {
         #region CTORs
@@ -17,10 +12,11 @@ namespace AgentCheker.DataBase
             string dataBase,
             int port,
             string pass)
-            : base(server, userName, dataBase, port, pass)
+            : base(server, userName, dataBase, port, pass, ServerDB.DC)
         {
             ServerName = server;
-            ConnectionString = string.Format($"Server = {server},{port}; Database = {dataBase}; User Id = aku0\\{userName}; Password = {pass}");
+            ConnectionString = $"Server={server};Database={dataBase};User Id={userName};Password={pass};Trusted_Connection=False;MultipleActiveResultSets=true";
+
             Query = @"SELECT comp.FQDN_NAME,
 		            Dateadd(s, convert(bigint, agent.[LAST_CONTACT_TIME]) / 1000
 			                    , convert(datetime, '1-1-1970'))+ '03:00:00' as 'lastConnectTime'

@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using AgentCheker.Log;
-using AgentCheker.Mail;
-
-namespace AgentCheker.DataBase
+﻿namespace AgentCheker.DataBase
 {
+    using AgentCheker.DataBase.Enums;
+
     public class DateBaseEset : DateBase
     {
 
@@ -15,7 +13,7 @@ namespace AgentCheker.DataBase
             string dataBase,
             int port,
             string pass)
-            : base(server, userName, dataBase, port, pass)
+            : base(server, userName, dataBase, port, pass, ServerDB.Eset)
         {
             ServerName = server;
             ConnectionString = string.Format($"Server = {server},{port}; Database = {dataBase}; User Id = aku0\\{userName}; Password = {pass}");

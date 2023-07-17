@@ -33,6 +33,23 @@
                Decrypt.DecryptCipherTextToPlainText(configJSONmail.MailConfig.FromPass),
                configJSONmail.MailConfig.Port);
 
+
+            const string DC_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
+                "AgentCheker\\DBconfigFileDC.json";
+
+            string configFileDC = File.ReadAllText(DC_Conf_File_Path);
+            Config configJSONdesckCen = JsonConvert.DeserializeObject<Config>(configFileDC);
+
+            DateBaseDC deskCenDB = new DateBaseDC(
+                configJSONdesckCen.DBConfig.Server,
+                configJSONdesckCen.DBConfig.UserName,
+                configJSONdesckCen.DBConfig.DBname,
+                configJSONdesckCen.DBConfig.Port,
+                Decrypt.DecryptCipherTextToPlainText(
+                    configJSONdesckCen.DBConfig.Pass));
+
+            deskCenDB.GetPC(logger, email);
+
             const string Eset_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
               "AgentCheker\\DBconfigFileEset.json";
 
@@ -48,20 +65,6 @@
                     configJsonEset.DBConfig.Pass));
 
             esetDB.GetPC(logger, email);
-
-            const string DC_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
-                "AgentCheker\\DBconfigFileDC.json";
-
-            string configFileDC = File.ReadAllText(DC_Conf_File_Path);
-            Config configJSONdesckCen = JsonConvert.DeserializeObject<Config>(configFileDC);
-
-            DateBaseDC deskCenDB = new DateBaseDC(
-                configJSONdesckCen.DBConfig.Server,
-                configJSONdesckCen.DBConfig.UserName,
-                configJSONdesckCen.DBConfig.DBname,
-                configJSONdesckCen.DBConfig.Port,
-                Decrypt.DecryptCipherTextToPlainText(
-                    configJSONdesckCen.DBConfig.Pass));
 
             List<string> dcNotConnected = new List<string>();
         }
