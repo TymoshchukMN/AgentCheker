@@ -187,6 +187,7 @@
     <Compile Include="DataBase\DateBase.cs" />
     <Compile Include="DataBase\DBConfig.cs" />
     <Compile Include="DataBase\Enums\ServerDB.cs" />
+    <Compile Include="DataBase\PC.cs" />
     <Compile Include="Interfaces\IDataProvider.cs" />
     <Compile Include="JSON\LoggerConfig.cs" />
     <Compile Include="Log\DateProvider\FileService.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Xml.Linq;
 using AgentCheker.DataBase.Enums;
 using AgentCheker.Interfaces;
 using AgentCheker.Log;
@@ -113,7 +114,7 @@ namespace AgentCheker.DataBase
 
         #endregion PROPERTIES
 
-        public List<string> GetPC(Logger logger, Email email, List<string> notConnected)
+        public List<PC> GetPC(Logger logger, Email email, List<PC> notConnected)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
@@ -172,7 +173,12 @@ namespace AgentCheker.DataBase
                         logger.AddLog(message);
                     }
 
-                    notConnected.Add(dataReader["pcName"] + ":" + dataReader["lastConnectTime"].ToString());
+                    notConnected.Add(
+                        new PC
+                        {
+                            PcName = (string)dataReader["pcName"],
+                            LastConnectionTime = (DateTime)dataReader.GetValue(1),
+                        });
 
                     message = $"{DateTime.Now};\t{MessageType.Info}" +
                                 $": {dataReader["pcName"]}\t{dataReader["lastConnectTime"]}";

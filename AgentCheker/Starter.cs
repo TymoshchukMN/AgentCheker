@@ -1,7 +1,9 @@
 ﻿namespace AgentCheker
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using AgentCheker.DataBase;
     using AgentCheker.DataBase.Enums;
     using AgentCheker.Encription;
@@ -44,10 +46,13 @@
                     configJSONdesckCen.DBConfig.Pass),
                 ServerDB.DC);
 
-            List<string> dcNotConnected = new List<string>();
+            // List<string> dcNotConnected = new List<string>();
+
+            var dcNotConnected = new List<PC>();
 
             deskCenDB.GetPC(logger, email, dcNotConnected);
 
+            var a = dcNotConnected.Where(x => x.LastConnectionTime < DateTime.Today.AddDays(-7)).ToList();
             const string Eset_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
               "AgentCheker\\DBconfigFileEset.json";
 
@@ -63,8 +68,10 @@
                     configJsonEset.DBConfig.Pass),
                 ServerDB.Eset);
 
-            esetDB.GetPC(logger, email, dcNotConnected);
+            List<PC> esetNotConnected = new List<PC>();
+            esetDB.GetPC(logger, email, esetNotConnected);
 
+            Console.ReadLine();
         }
     }
 }
