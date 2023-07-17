@@ -13,7 +13,7 @@ namespace AgentCheker.DataBase
     {
         #region FIELDS
 
-        private const string _dcQuery = @"SELECT comp.FQDN_NAME,
+        private const string _dcQuery = @"SELECT comp.FQDN_NAME  as 'pcName',
 		            Dateadd(s, convert(bigint, agent.[LAST_CONTACT_TIME]) / 1000
 			                    , convert(datetime, '1-1-1970'))+ '03:00:00' as 'lastConnectTime'
                     from [desktopcentral].[dbo].[ManagedComputer] as comp
@@ -22,8 +22,8 @@ namespace AgentCheker.DataBase
                     ";
 
         private const string _esetQuery = @"
-                        select	t1.computer_name,
-                            t2.[computer_connected] + '03:00:00' as 'lastConnected'
+                        select	t1.computer_name as 'pcName',
+                            t2.[computer_connected] + '03:00:00' as 'lastConnectTime'
                         from tbl_computers as t1
                         inner join [era_db].[dbo].[tbl_computers_aggr] as t2
                         on t1.computer_id = t2.computer_id
@@ -35,6 +35,7 @@ namespace AgentCheker.DataBase
         private readonly ServerDB _dbServer;
         private string _query;
         private string _connectionString;
+
         private string _serverName;
 
         #endregion FIELDS
@@ -42,17 +43,30 @@ namespace AgentCheker.DataBase
         #region CTORs
 
         public DateBase(
+            string serverName,
+            ServerDB dbServer)
+        {
+            _serverName = serverName;
+            _dbServer = dbServer;
+        }
+
+        public DateBase(
             string server,
             string userName,
             string dataBase,
             int port,
             string pass,
-            ServerDB dbServer)
+            ServerDB serverDB)
         {
-            _serverName = server;
-            _connectionString = string.Format($"Server = {server},{port}; Database = {dataBase}; User Id = aku0\\{userName}; Password = {pass}");
-            _dbServer = dbServer;
-        }
+            ServerName = server;
+            ConnectionString = $"Server={server};" +
+                $"Database={dataBase};" +
+                $"User Id={userName};" +
+                $"Password={pass};" +
+                $"Trusted_Connection=False;" +
+                $"MultipleActiveResultSets=true";
+            _dbServer = serverDB;
+    }
 
         #endregion CTORs
 
@@ -99,30 +113,29 @@ namespace AgentCheker.DataBase
 
         #endregion PROPERTIES
 
-        public List<string> GetPC(Logger logger, Email email)
+        public List<string> GetPC(Logger logger, Email email, List<string> notConnected)
         {
-            List<string> pc = new List<string>();
-
-            using (var con = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
+                string message;
                 try
                 {
-                    string message = $"{DateTime.Now};{MessageType.Info}" +
-                                   $": Attempt to connected to Database {ServerName}";
+                    message = $"{DateTime.Now};{MessageType.Info}" +
+                                   $":\tAttempt to connected to Database {ServerName}";
 
                     logger.AddLog(message);
 
-                    con.Open();
+                    connection.Open();
 
-                    message = $"{DateTime.Now};{MessageType.Info}" +
-                                    $": Connected to Database {ServerName}";
+                    message = $"{DateTime.Now};\t{MessageType.Info}" +
+                                    $":\tConnected to Database {ServerName}";
 
                     logger.AddLog(message);
                 }
                 catch (Exception ex)
                 {
-                    string message = $"{DateTime.Now};{MessageType.Error}" +
-                                $": Action failed by a reason; Action got this " +
+                    message = $"{DateTime.Now};\t{MessageType.Error}" +
+                                $":\tAction failed by a reason; Action got this " +
                                 $"Error. Cannont connect to DB\n{ex.Message}";
 
                     logger.AddLog(message);
@@ -146,20 +159,34 @@ namespace AgentCheker.DataBase
                         break;
                 }
 
-                command = new SqlCommand(Query, con);
+                command = new SqlCommand(Query, connection);
                 dataReader = command.ExecuteReader();
+                bool isFinded = false;
 
                 while (dataReader.Read())
                 {
-                    Console.WriteLine(dataReader.GetValue(0) + " - " + dataReader.GetValue(1) + " - " + dataReader.GetValue(2));
+                    if (!isFinded)
+                    {
+                        isFinded = true;
+                        message = $"Найдены устройства на сервере {ServerName}{(char)10}";
+                        logger.AddLog(message);
+                    }
+
+                    notConnected.Add(dataReader["pcName"] + ":" + dataReader["lastConnectTime"].ToString());
+
+                    message = $"{DateTime.Now};\t{MessageType.Info}" +
+                                $": {dataReader["pcName"]}\t{dataReader["lastConnectTime"]}";
+                    UI.PrintLog(message);
+
+                    logger.AddLog(message);
                 }
 
                 dataReader.Close();
                 command.Dispose();
-                con.Close();
+                connection.Close();
             }
 
-            return pc;
+            return notConnected;
         }
     }
 }

@@ -1,16 +1,12 @@
 ﻿namespace AgentCheker
 {
-    using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Data.SqlClient;
     using System.IO;
     using AgentCheker.DataBase;
+    using AgentCheker.DataBase.Enums;
     using AgentCheker.Encription;
-    using AgentCheker.Interfaces;
     using AgentCheker.Json;
     using AgentCheker.Log;
-    using AgentCheker.Log.Enums;
     using AgentCheker.Mail;
     using Newtonsoft.Json;
 
@@ -33,22 +29,24 @@
                Decrypt.DecryptCipherTextToPlainText(configJSONmail.MailConfig.FromPass),
                configJSONmail.MailConfig.Port);
 
-
             const string DC_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
                 "AgentCheker\\DBconfigFileDC.json";
 
             string configFileDC = File.ReadAllText(DC_Conf_File_Path);
             Config configJSONdesckCen = JsonConvert.DeserializeObject<Config>(configFileDC);
 
-            DateBaseDC deskCenDB = new DateBaseDC(
+            DateBase deskCenDB = new DateBase(
                 configJSONdesckCen.DBConfig.Server,
                 configJSONdesckCen.DBConfig.UserName,
                 configJSONdesckCen.DBConfig.DBname,
                 configJSONdesckCen.DBConfig.Port,
                 Decrypt.DecryptCipherTextToPlainText(
-                    configJSONdesckCen.DBConfig.Pass));
+                    configJSONdesckCen.DBConfig.Pass),
+                ServerDB.DC);
 
-            deskCenDB.GetPC(logger, email);
+            List<string> dcNotConnected = new List<string>();
+
+            deskCenDB.GetPC(logger, email, dcNotConnected);
 
             const string Eset_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
               "AgentCheker\\DBconfigFileEset.json";
@@ -56,17 +54,17 @@
             string configFileEset = File.ReadAllText(Eset_Conf_File_Path);
             Config configJsonEset = JsonConvert.DeserializeObject<Config>(configFileEset);
 
-            DateBaseEset esetDB = new DateBaseEset(
+            DateBase esetDB = new DateBase(
                 configJsonEset.DBConfig.Server,
                 configJsonEset.DBConfig.UserName,
                 configJsonEset.DBConfig.DBname,
                 configJsonEset.DBConfig.Port,
                 Decrypt.DecryptCipherTextToPlainText(
-                    configJsonEset.DBConfig.Pass));
+                    configJsonEset.DBConfig.Pass),
+                ServerDB.Eset);
 
-            esetDB.GetPC(logger, email);
+            esetDB.GetPC(logger, email, dcNotConnected);
 
-            List<string> dcNotConnected = new List<string>();
         }
     }
 }

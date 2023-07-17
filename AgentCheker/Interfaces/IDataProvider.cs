@@ -7,6 +7,9 @@ namespace AgentCheker.Interfaces
 {
     public interface IDataProvider
     {
-        List<string> GetPC(Logger logger, Email email);
+        List<string> GetPC(
+            Logger logger,
+            Email email,
+            List<string> notConnected);
     }
 }
