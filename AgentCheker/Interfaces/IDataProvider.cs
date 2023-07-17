@@ -1,9 +1,15 @@
-﻿namespace AgentCheker.Interfaces
-{
-    using AgentCheker.Log;
+﻿using AgentCheker.DataBase;
+using AgentCheker.Log;
+using AgentCheker.Mail;
 
+namespace AgentCheker.Interfaces
+{
     public interface IDataProvider
     {
-        void WriteIntoFile(Logger logger);
+        string Query { get; }
+
+        string ConnectionString { get; }
+
+        string ServerName { get; }
     }
 }

@@ -48,12 +48,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataBase\DateBase.cs" />
+    <Compile Include="DataBase\DateBaseDC.cs" />
+    <Compile Include="DataBase\DateBaseEset.cs" />
     <Compile Include="DataBase\DBConfig.cs" />
+    <Compile Include="Interfaces\IDataProvider.cs" />
     <Compile Include="JSON\LoggerConfig.cs" />
     <Compile Include="Log\DateProvider\FileService.cs" />
     <Compile Include="Encryption\Decrypt.cs" />
     <Compile Include="Log\Enums\MessageType.cs" />
-    <Compile Include="Interfaces\IDataProvider.cs" />
+    <Compile Include="Interfaces\ILogProvider.cs" />
     <Compile Include="JSON\Config.cs" />
     <Compile Include="JSON\DBConfigJSON.cs" />
     <Compile Include="JSON\MailConfigJSON.cs" />

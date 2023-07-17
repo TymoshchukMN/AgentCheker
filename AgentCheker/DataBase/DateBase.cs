@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using AgentCheker.Interfaces;
 
 namespace AgentCheker.DataBase
 {
-    internal class DateBase
+    public class DateBase : IDataProvider
     {
         #region FIELDS
 
+        private string _query;
         private string _connectionString;
+        private string _serverName;
 
         #endregion FIELDS
 
@@ -21,12 +21,8 @@ namespace AgentCheker.DataBase
             int port,
             string pass)
         {
-            _connectionString = string.Format(
-                    $"Server={server};" +
-                    $"Username={userName};" +
-                    $"Database={dataBase};" +
-                    $"Port={port};" +
-                    $"Password={pass}");
+            _serverName = server;
+            _connectionString = string.Format($"Server = {server},{port}; Database = {dataBase}; User Id = aku0\\{userName}; Password = {pass}");
         }
 
         #endregion CTORs
@@ -39,6 +35,27 @@ namespace AgentCheker.DataBase
             {
                 return _connectionString;
             }
+
+            set
+            {
+                _connectionString = value;
+            }
+        }
+
+        public string ServerName
+        {
+            get { return _serverName; }
+            set { _serverName = value; }
+        }
+
+        public virtual string Query
+        {
+            get
+            {
+                return _query;
+            }
+
+            set => _query = value;
         }
 
         #endregion PROPERTIES

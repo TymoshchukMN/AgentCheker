@@ -3,7 +3,7 @@ using System.Net.Mail;
 
 namespace AgentCheker.Mail
 {
-    internal class Email
+    public class Email
     {
         #region COSNTANTS
 

@@ -1,12 +1,11 @@
 ﻿namespace AgentCheker.Json
 {
     using AgentCheker.DataBase;
-    using AgentCheker.Log;
     using AgentCheker.Mail;
 
     public class Config
     {
-        public DBConfig DataBaseConfig { get; set; }
+        public DBConfig DBConfig { get; set; }
 
         public MailConfig MailConfig { get; set; }
 
