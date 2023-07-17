@@ -47,7 +47,7 @@
                 Decrypt.DecryptCipherTextToPlainText(
                     configJsonEset.DBConfig.Pass));
 
-            GetPC(logger, email, esetDB);
+            esetDB.GetPC(logger, email);
 
             const string DC_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
                 "AgentCheker\\DBconfigFileDC.json";
@@ -64,57 +64,6 @@
                     configJSONdesckCen.DBConfig.Pass));
 
             List<string> dcNotConnected = new List<string>();
-        }
-
-        private static void GetPC(Logger logger, Email email, DateBaseEset dateBase)
-        {
-            using (var con = new SqlConnection(dateBase.ConnectionString))
-            {
-                try
-                {
-                    con.Open();
-
-                    string message = $"{DateTime.Now};{MessageType.Info}" +
-                                    $": Connected to Database {dateBase.ServerName}";
-
-                    logger.AddLog(message);
-                }
-                catch (Exception ex)
-                {
-                    string message = $"{DateTime.Now};{MessageType.Error}" +
-                                $": Action failed by a reason; Action got this " +
-                                $"Error. Cannont connect to DB\n{ex.Message}";
-
-                    logger.AddLog(message);
-                    email.SendMail(message);
-
-                    throw;
-                }
-
-                SqlCommand command;
-                SqlDataReader dataReader;
-                string sqlQuery = @"
-                        select	t1.computer_name,
-                            t2.[computer_connected] + '03:00:00' as 'lastConnected'
-                        from tbl_computers as t1
-                        inner join [era_db].[dbo].[tbl_computers_aggr] as t2
-                        on t1.computer_id = t2.computer_id
-                        where t2.[computer_connected] is not NULL 
-                        and t2.[computer_connected] <= DATEADD(DAY,-14,GETDATE())
-                        order by t2.[computer_connected] desc
-                        ";
-
-                command = new SqlCommand(sqlQuery, con);
-                dataReader = command.ExecuteReader();
-                while (dataReader.Read())
-                {
-                    Console.WriteLine(dataReader.GetValue(0) + " - " + dataReader.GetValue(1) + " - " + dataReader.GetValue(2));
-                }
-
-                dataReader.Close();
-                command.Dispose();
-                con.Close();
-            }
         }
     }
 }

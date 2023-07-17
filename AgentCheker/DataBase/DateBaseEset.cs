@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using AgentCheker.Interfaces;
+﻿using System.Collections.Generic;
+using AgentCheker.Log;
+using AgentCheker.Mail;
 
 namespace AgentCheker.DataBase
 {
