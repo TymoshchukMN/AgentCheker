@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AgentCheker.DataBase
+namespace AgentChecker.DataBase
 {
     public class PC
     {

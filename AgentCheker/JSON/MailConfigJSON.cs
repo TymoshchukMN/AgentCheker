@@ -1,6 +1,6 @@
-﻿using AgentCheker.Mail;
+﻿using AgentChecker.Mail;
 
-namespace AgentCheker.Json
+namespace AgentChecker.Json
 {
     public class MailConfigJSON
     {

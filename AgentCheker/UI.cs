@@ -1,7 +1,7 @@
 ﻿using System;
-using AgentCheker.Log.Enums;
+using AgentChecker.Log.Enums;
 
-namespace AgentCheker
+namespace AgentChecker
 {
     internal class UI
     {

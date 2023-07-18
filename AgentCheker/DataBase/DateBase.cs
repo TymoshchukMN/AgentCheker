@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Xml.Linq;
-using AgentCheker.DataBase.Enums;
-using AgentCheker.Interfaces;
-using AgentCheker.Log;
-using AgentCheker.Log.Enums;
-using AgentCheker.Mail;
+using AgentChecker.DataBase.Enums;
+using AgentChecker.Interfaces;
+using AgentChecker.Log;
+using AgentChecker.Log.Enums;
+using AgentChecker.Mail;
 
-namespace AgentCheker.DataBase
+namespace AgentChecker.DataBase
 {
     public class DateBase : IDataProvider
     {

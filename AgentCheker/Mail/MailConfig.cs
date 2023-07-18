@@ -1,4 +1,4 @@
-﻿namespace AgentCheker.Mail
+﻿namespace AgentChecker.Mail
 {
     public class MailConfig
     {

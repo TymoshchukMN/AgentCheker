@@ -1,6 +1,6 @@
-﻿using AgentCheker.DataBase;
+﻿using AgentChecker.DataBase;
 
-namespace AgentCheker.Json
+namespace AgentChecker.Json
 {
     public class DBConfigJSON
     {

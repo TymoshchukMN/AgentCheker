@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using AgentCheker.DataBase;
-using AgentCheker.Log;
-using AgentCheker.Mail;
+using AgentChecker.DataBase;
+using AgentChecker.Log;
+using AgentChecker.Mail;
 
-namespace AgentCheker.Interfaces
+namespace AgentChecker.Interfaces
 {
     public interface IDataProvider
     {

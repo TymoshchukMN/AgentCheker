@@ -1,15 +1,15 @@
-﻿namespace AgentCheker
+﻿namespace AgentChecker
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using AgentCheker.DataBase;
-    using AgentCheker.DataBase.Enums;
-    using AgentCheker.Encription;
-    using AgentCheker.Json;
-    using AgentCheker.Log;
-    using AgentCheker.Mail;
+    using AgentChecker.DataBase;
+    using AgentChecker.DataBase.Enums;
+    using AgentChecker.Encription;
+    using AgentChecker.Json;
+    using AgentChecker.Log;
+    using AgentChecker.Mail;
     using Newtonsoft.Json;
 
     public class Starter
@@ -18,24 +18,27 @@
         {
             Logger logger = Logger.GetInstatce();
 
-            const string MAIL_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
+            const string MAIL_CONF_FILE_PATH = "N:\\Personal\\TymoshchukMN\\" +
                 "AgentCheker\\MailConfigFile.json";
 
-            string configFileMail = File.ReadAllText(MAIL_Conf_File_Path);
-            Config configJSONmail = JsonConvert.DeserializeObject<Config>(configFileMail);
+            string configFileMail = File.ReadAllText(MAIL_CONF_FILE_PATH);
+            Config configJSONmail =
+                JsonConvert.DeserializeObject<Config>(configFileMail);
 
             Email email = new Email(
                configJSONmail.MailConfig.FromAddress,
                configJSONmail.MailConfig.ToAddress,
                configJSONmail.MailConfig.MailServer,
-               Decrypt.DecryptCipherTextToPlainText(configJSONmail.MailConfig.FromPass),
+               Decrypt.DecryptCipherTextToPlainText(
+                   configJSONmail.MailConfig.FromPass),
                configJSONmail.MailConfig.Port);
 
-            const string DC_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
+            const string DC_CONF_FILE_PATH = "N:\\Personal\\TymoshchukMN\\" +
                 "AgentCheker\\DBconfigFileDC.json";
 
-            string configFileDC = File.ReadAllText(DC_Conf_File_Path);
-            Config configJSONdesckCen = JsonConvert.DeserializeObject<Config>(configFileDC);
+            string configFileDC = File.ReadAllText(DC_CONF_FILE_PATH);
+            Config configJSONdesckCen 
+                = JsonConvert.DeserializeObject<Config>(configFileDC);
 
             DateBase deskCenDB = new DateBase(
                 configJSONdesckCen.DBConfig.Server,
@@ -46,18 +49,20 @@
                     configJSONdesckCen.DBConfig.Pass),
                 ServerDB.DC);
 
-            // List<string> dcNotConnected = new List<string>();
+            List<PC> dcAlldevices = new List<PC>();
 
-            var dcNotConnected = new List<PC>();
+            deskCenDB.GetPC(logger, email, dcAlldevices);
 
-            deskCenDB.GetPC(logger, email, dcNotConnected);
+            List<PC> dcNotConnected =
+                dcAlldevices.Where(x => x.LastConnectionTime <
+                DateTime.Today.AddDays(-7)).ToList();
 
-            var a = dcNotConnected.Where(x => x.LastConnectionTime < DateTime.Today.AddDays(-7)).ToList();
             const string Eset_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
               "AgentCheker\\DBconfigFileEset.json";
 
             string configFileEset = File.ReadAllText(Eset_Conf_File_Path);
-            Config configJsonEset = JsonConvert.DeserializeObject<Config>(configFileEset);
+            Config configJsonEset =
+                JsonConvert.DeserializeObject<Config>(configFileEset);
 
             DateBase esetDB = new DateBase(
                 configJsonEset.DBConfig.Server,

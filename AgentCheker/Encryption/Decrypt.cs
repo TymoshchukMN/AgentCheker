@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace AgentCheker.Encription
+namespace AgentChecker.Encription
 {
     public static class Decrypt
     {

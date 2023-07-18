@@ -1,4 +1,4 @@
-﻿namespace AgentCheker.Json
+﻿namespace AgentChecker.Json
 {
     public class LoggerConfig
     {

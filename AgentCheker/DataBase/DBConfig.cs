@@ -1,4 +1,4 @@
-﻿namespace AgentCheker.DataBase
+﻿namespace AgentChecker.DataBase
 {
     public class DBConfig
     {

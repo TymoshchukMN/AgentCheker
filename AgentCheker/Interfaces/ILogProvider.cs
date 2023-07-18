@@ -1,6 +1,6 @@
-﻿namespace AgentCheker.Interfaces
+﻿namespace AgentChecker.Interfaces
 {
-    using AgentCheker.Log;
+    using AgentChecker.Log;
 
     public interface ILogProvider
     {

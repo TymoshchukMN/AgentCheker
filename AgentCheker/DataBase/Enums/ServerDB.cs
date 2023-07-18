@@ -1,4 +1,4 @@
-﻿namespace AgentCheker.DataBase.Enums
+﻿namespace AgentChecker.DataBase.Enums
 {
     public enum ServerDB
     {
