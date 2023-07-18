@@ -57,6 +57,12 @@
                 dcAlldevices.Where(x => x.LastConnectionTime <
                 DateTime.Today.AddDays(-7)).ToList();
 
+
+            List<PC> esetNotConnected = new List<PC>();
+            Checker checker = new Checker();
+            checker.CheckPCs(dcNotConnected, esetNotConnected);
+
+
             const string Eset_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
               "AgentCheker\\DBconfigFileEset.json";
 
@@ -73,7 +79,7 @@
                     configJsonEset.DBConfig.Pass),
                 ServerDB.Eset);
 
-            List<PC> esetNotConnected = new List<PC>();
+            
             esetDB.GetPC(logger, email, esetNotConnected);
 
             Console.ReadLine();
