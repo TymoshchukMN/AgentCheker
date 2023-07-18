@@ -24,6 +24,9 @@ namespace AgentChecker
                 case MessageType.Warning:
                     ChangeColor("Warning", ConsoleColor.Yellow);
                     break;
+                case MessageType.Success:
+                    ChangeColor("Success", ConsoleColor.Green);
+                    break;
             }
 
             Console.WriteLine(

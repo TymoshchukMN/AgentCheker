@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using AgentChecker.DataBase;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Mail;
 
 namespace AgentChecker.Mail
@@ -7,13 +9,13 @@ namespace AgentChecker.Mail
     {
         #region COSNTANTS
 
-        private const string MailSubject = "Agent cheker";
+        private const string MailSubject = "Agent checker";
 
         #endregion COSNTANTS
 
         #region FIELDS
 
-        private string _body =
+        private string _headTable =
             @"
             <p>Titles was chanched for users:<br></p>
 
@@ -21,25 +23,17 @@ namespace AgentChecker.Mail
             <tr style = 'font-size:12px;font-weight: normal;background: #FFFFFF;background-color: #32CD32;' >
                 <th align = Center>
                     <b>
-                        Login
+                        PC name
                     </b>
                 </th>
                 <th align = Center >
                     <b>
-                        new Title
+                        last connect time
                     </b>
                 </th>
-                <th align = Center >
-                    <b>
-                        old Title
-                    </b>
-                </th >
-                <th align = Center >
-                    <b>
-                        access to systems
-                    </b>
-                </th >
              </tr > ";
+
+        private string _body;
 
         private SmtpClient _smtp;
         private MailAddress _fromAddress;
@@ -101,28 +95,39 @@ namespace AgentChecker.Mail
         }
 
         /// <summary>
-        /// Processing mai.
+        /// Send en email.
         /// </summary>
-        /// <param name="usersTbl">
-        /// Table with users.
+        /// <param name="body">
+        /// Body message.
         /// </param>
-        public void ProcessEmailBody(string[] usersTbl)
+        public void SendMail()
         {
-            for (int i = 0; i < usersTbl.Length; i++)
+            using
+            (
+                MailMessage message = new MailMessage(_fromAddress, _toAddress)
+                {
+                    Subject = MailSubject,
+                    Body = _body,
+                    IsBodyHtml = true,
+                })
             {
-                string sasAMAccountName = usersTbl[i].Split(';')[0];
-                string oldTitle = usersTbl[i].Split(';')[1];
-                string newTitle = usersTbl[i].Split(';')[2];
-                string systems = usersTbl[i].Split(';')[3];
+                _smtp.Send(message);
+            }
+        }
 
+        public void ProcessEmailBody(string serverName, List<PC> pCs)
+        {
+            _body += $"{serverName}<br>";
+            _body += _headTable;
+
+            foreach (PC p in pCs)
+            {
                 string row = string.Format(
-                    $"" +
-                    $"<tr style='font-size:12px;background-color:#FFFFFF'>" +
-                    $"  <td>{sasAMAccountName}</td>" +
-                    $"  <td>{newTitle}</td>" +
-                    $"  <td>{oldTitle}</td>" +
-                    $"  <td>{systems}</td>" +
-                    $"</tr > ");
+                       $"" +
+                       $"<tr style='font-size:12px;background-color:#FFFFFF'>" +
+                       $"  <td>{p.PcName}</td>" +
+                       $"  <td>{p.LastConnectionTime}</td>" +
+                       $"</tr > ");
 
                 _body += row;
             }

@@ -37,7 +37,7 @@
                 "AgentCheker\\DBconfigFileDC.json";
 
             string configFileDC = File.ReadAllText(DC_CONF_FILE_PATH);
-            Config configJSONdesckCen 
+            Config configJSONdesckCen
                 = JsonConvert.DeserializeObject<Config>(configFileDC);
 
             DateBase deskCenDB = new DateBase(
@@ -50,18 +50,14 @@
                 ServerDB.DC);
 
             List<PC> dcAlldevices = new List<PC>();
-
-            deskCenDB.GetPC(logger, email, dcAlldevices);
+            deskCenDB.GetPC(logger, email);
+            dcAlldevices = deskCenDB.NotConnectedPC;
 
             List<PC> dcNotConnected =
                 dcAlldevices.Where(x => x.LastConnectionTime <
-                DateTime.Today.AddDays(-7)).ToList();
+                DateTime.Today.AddDays(-14)).ToList();
 
-
-            List<PC> esetNotConnected = new List<PC>();
-            Checker checker = new Checker();
-            checker.CheckPCs(dcNotConnected, esetNotConnected);
-
+            email.ProcessEmailBody(deskCenDB.ServerName, dcNotConnected);
 
             const string Eset_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
               "AgentCheker\\DBconfigFileEset.json";
@@ -79,8 +75,24 @@
                     configJsonEset.DBConfig.Pass),
                 ServerDB.Eset);
 
-            
-            esetDB.GetPC(logger, email, esetNotConnected);
+            List<PC> esetNotConnected = new List<PC>();
+
+            esetDB.GetPC(logger, email);
+            Checker checker = new Checker();
+            esetNotConnected = esetDB.NotConnectedPC;
+
+            List<PC> dcPingResult = new List<PC>();
+            List<PC> esetPingResult = new List<PC>();
+
+            checker.CheckPCs(
+                dcNotConnected,
+                esetNotConnected,
+                dcPingResult,
+                esetPingResult);
+
+            email.ProcessEmailBody(deskCenDB.ServerName, dcPingResult);
+            email.ProcessEmailBody(esetDB.ServerName, esetPingResult);
+            email.SendMail();
 
             Console.ReadLine();
         }

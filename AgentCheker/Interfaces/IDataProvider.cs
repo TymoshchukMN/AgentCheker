@@ -7,9 +7,8 @@ namespace AgentChecker.Interfaces
 {
     public interface IDataProvider
     {
-        List<PC> GetPC(
+        void GetPC(
             Logger logger,
-            Email email,
-            List<PC> notConnected);
+            Email email);
     }
 }

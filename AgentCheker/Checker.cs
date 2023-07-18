@@ -1,10 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using AgentChecker.DataBase;
 using AgentChecker.Log;
 using AgentChecker.Log.Enums;
@@ -14,7 +12,7 @@ namespace AgentChecker
 {
     public class Checker : IChecker
     {
-        public static bool PingHost(string nameOrAddress)
+        public static bool PingHost(string nameOrAddress, DateTime lasconnect)
         {
             bool pingable = false;
             Ping pinger = null;
@@ -30,7 +28,7 @@ namespace AgentChecker
                 Logger logger = Logger.GetInstatce();
 
                 string message = $"{DateTime.Now};\t{MessageType.Error}" +
-                                $": {nameOrAddress}\tCann`t ping host";
+                                $": {nameOrAddress}\tCann`t ping host\t{lasconnect}";
                 logger.AddLog(message);
                 UI.PrintLog(message);
             }
@@ -42,20 +40,40 @@ namespace AgentChecker
             return pingable;
         }
 
-        public List<PC> CheckPCs(List<PC> dcPCs, List<PC> esetPCs)
+        public void CheckPCs(
+            List<PC> dcPCs,
+            List<PC> esetPCs,
+            List<PC> dcPingResult,
+            List<PC> esetPingResult)
         {
-
-            var ll = dcPCs.Where((x) =>
+            Console.WriteLine("=======  DC ==============");
+            var availablePCfromDC = dcPCs.Where((x) =>
             {
-                return PingHost(x.PcName);
-            }).Select((n) => (n.PcName, n.LastConnectionTime));
+                return PingHost(x.PcName, x.LastConnectionTime);
+            }).Select((n) => (n.PcName, n.LastConnectionTime)).ToList();
 
-            foreach (var pc in ll)
+            dcPingResult = (List<PC>)(IEnumerable)availablePCfromDC.ToList();
+
+            foreach (var pc in availablePCfromDC)
             {
-                Console.WriteLine($"{pc.PcName}\t{pc.LastConnectionTime}");
+                UI.PrintLog($"{DateTime.Now};\t{MessageType.Success}" +
+                              $": {pc.PcName}\t{pc.LastConnectionTime}");
             }
 
-            return (List<PC>)ll;
+            Console.WriteLine("=======  Eset ==============");
+
+            var availablePCfromEset = esetPCs.Where((x) =>
+            {
+                return PingHost(x.PcName, x.LastConnectionTime);
+            }).Select((n) => (n.PcName, n.LastConnectionTime));
+
+            esetPingResult = (List<PC>)(IEnumerable)availablePCfromEset.ToList();
+
+            foreach (var pc in availablePCfromEset)
+            {
+                UI.PrintLog($"{DateTime.Now};\t{MessageType.Success}" +
+                              $": {pc.PcName}\t{pc.LastConnectionTime}");
+            }
         }
     }
 }

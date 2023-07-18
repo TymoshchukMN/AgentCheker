@@ -5,6 +5,10 @@ namespace AgentCheker.Interfaces
 {
     public interface IChecker
     {
-        List<PC> CheckPCs(List<PC> dcPCs, List<PC> esetPCs);
+        void CheckPCs(
+            List<PC> dcPCs,
+            List<PC> esetPCs,
+            List<PC> dcPingResult,
+            List<PC> esetPingResult);
     }
 }

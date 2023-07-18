@@ -19,8 +19,7 @@ namespace AgentChecker.DataBase
 			                    , convert(datetime, '1-1-1970'))+ '03:00:00' as 'lastConnectTime'
                     from [desktopcentral].[dbo].[ManagedComputer] as comp
                     inner join [desktopcentral].[dbo].[AgentContact] as agent on agent.RESOURCE_ID = comp.RESOURCE_ID
-                    order by agent.[LAST_CONTACT_TIME] desc
-                    ";
+                    order by comp.FQDN_NAME";
 
         private const string _esetQuery = @"
                         select	t1.computer_name as 'pcName',
@@ -30,14 +29,14 @@ namespace AgentChecker.DataBase
                         on t1.computer_id = t2.computer_id
                         where t2.[computer_connected] is not NULL 
                         and t2.[computer_connected] <= DATEADD(DAY,-14,GETDATE())
-                        order by t2.[computer_connected] desc
+                        order by t1.computer_name
                         ";
 
         private readonly ServerDB _dbServer;
         private string _query;
         private string _connectionString;
-
         private string _serverName;
+        private List<PC> _notConnectedPC;
 
         #endregion FIELDS
 
@@ -112,9 +111,14 @@ namespace AgentChecker.DataBase
             get { return _esetQuery; }
         }
 
+        public List<PC> NotConnectedPC
+        {
+            get { return new List<PC>(_notConnectedPC); }
+        }
+
         #endregion PROPERTIES
 
-        public List<PC> GetPC(Logger logger, Email email, List<PC> notConnected)
+        public void GetPC(Logger logger, Email email)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
@@ -140,8 +144,6 @@ namespace AgentChecker.DataBase
                                 $"Error. Cannont connect to DB\n{ex.Message}";
 
                     logger.AddLog(message);
-                    email.SendMail(message);
-
                     throw;
                 }
 
@@ -164,6 +166,8 @@ namespace AgentChecker.DataBase
                 dataReader = command.ExecuteReader();
                 bool isFinded = false;
 
+                _notConnectedPC = new List<PC> { new PC() };
+
                 while (dataReader.Read())
                 {
                     if (!isFinded)
@@ -173,17 +177,17 @@ namespace AgentChecker.DataBase
                         logger.AddLog(message);
                     }
 
-                    notConnected.Add(
+                    _notConnectedPC.Add(
                         new PC
                         {
                             PcName = (string)dataReader["pcName"],
                             LastConnectionTime = (DateTime)dataReader.GetValue(1),
                         });
+                }
 
-                    message = $"{DateTime.Now};\t{MessageType.Info}" +
-                                $": {dataReader["pcName"]}\t{dataReader["lastConnectTime"]}";
-                    UI.PrintLog(message);
-
+                if (!isFinded)
+                {
+                    message = $"Количество устройств на сервере {ServerName}: {_notConnectedPC.Count}{(char)10}";
                     logger.AddLog(message);
                 }
 
@@ -192,7 +196,7 @@ namespace AgentChecker.DataBase
                 connection.Close();
             }
 
-            return notConnected;
+            // return notConnected;
         }
     }
 }
