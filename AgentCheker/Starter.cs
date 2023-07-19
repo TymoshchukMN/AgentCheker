@@ -57,8 +57,6 @@
                 dcAlldevices.Where(x => x.LastConnectionTime <
                 DateTime.Today.AddDays(-14)).ToList();
 
-            email.ProcessEmailBody(deskCenDB.ServerName, dcNotConnected);
-
             const string Eset_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
               "AgentCheker\\DBconfigFileEset.json";
 
@@ -87,8 +85,8 @@
             checker.CheckPCs(
                 dcNotConnected,
                 esetNotConnected,
-                dcPingResult,
-                esetPingResult);
+                ref dcPingResult,
+                ref esetPingResult);
 
             email.ProcessEmailBody(deskCenDB.ServerName, dcPingResult);
             email.ProcessEmailBody(esetDB.ServerName, esetPingResult);

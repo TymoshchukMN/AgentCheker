@@ -43,14 +43,6 @@ namespace AgentChecker.DataBase
         #region CTORs
 
         public DateBase(
-            string serverName,
-            ServerDB dbServer)
-        {
-            _serverName = serverName;
-            _dbServer = dbServer;
-        }
-
-        public DateBase(
             string server,
             string userName,
             string dataBase,
@@ -126,7 +118,7 @@ namespace AgentChecker.DataBase
                 try
                 {
                     message = $"{DateTime.Now};{MessageType.Info}" +
-                                   $":\tAttempt to connected to Database {ServerName}";
+                                   $":\tAttempt to connect to Database {ServerName}";
 
                     logger.AddLog(message);
 
@@ -195,8 +187,6 @@ namespace AgentChecker.DataBase
                 command.Dispose();
                 connection.Close();
             }
-
-            // return notConnected;
         }
     }
 }

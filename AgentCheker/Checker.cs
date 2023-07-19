@@ -22,6 +22,10 @@ namespace AgentChecker
                 pinger = new Ping();
                 PingReply reply = pinger.Send(nameOrAddress);
                 pingable = reply.Status == IPStatus.Success;
+
+                string message = $"{DateTime.Now};\t{MessageType.Success}" +
+                                $": {nameOrAddress}\tping success\t{lasconnect}";
+                UI.PrintLog(message);
             }
             catch
             {
@@ -43,37 +47,21 @@ namespace AgentChecker
         public void CheckPCs(
             List<PC> dcPCs,
             List<PC> esetPCs,
-            List<PC> dcPingResult,
-            List<PC> esetPingResult)
+            ref List<PC> dcPingResult,
+            ref List<PC> esetPingResult)
         {
             Console.WriteLine("=======  DC ==============");
-            var availablePCfromDC = dcPCs.Where((x) =>
+            dcPingResult = dcPCs.Skip(1).Where((x) =>
             {
                 return PingHost(x.PcName, x.LastConnectionTime);
-            }).Select((n) => (n.PcName, n.LastConnectionTime)).ToList();
-
-            dcPingResult = (List<PC>)(IEnumerable)availablePCfromDC.ToList();
-
-            foreach (var pc in availablePCfromDC)
-            {
-                UI.PrintLog($"{DateTime.Now};\t{MessageType.Success}" +
-                              $": {pc.PcName}\t{pc.LastConnectionTime}");
-            }
+            }).Select((n) => n).ToList();
 
             Console.WriteLine("=======  Eset ==============");
 
-            var availablePCfromEset = esetPCs.Where((x) =>
+            esetPingResult = esetPCs.Skip(1).Where((x) =>
             {
                 return PingHost(x.PcName, x.LastConnectionTime);
-            }).Select((n) => (n.PcName, n.LastConnectionTime));
-
-            esetPingResult = (List<PC>)(IEnumerable)availablePCfromEset.ToList();
-
-            foreach (var pc in availablePCfromEset)
-            {
-                UI.PrintLog($"{DateTime.Now};\t{MessageType.Success}" +
-                              $": {pc.PcName}\t{pc.LastConnectionTime}");
-            }
+            }).Select((n) => n).ToList();
         }
     }
 }

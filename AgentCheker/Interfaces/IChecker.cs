@@ -8,7 +8,7 @@ namespace AgentCheker.Interfaces
         void CheckPCs(
             List<PC> dcPCs,
             List<PC> esetPCs,
-            List<PC> dcPingResult,
-            List<PC> esetPingResult);
+            ref List<PC> dcPingResult,
+            ref List<PC> esetPingResult);
     }
 }

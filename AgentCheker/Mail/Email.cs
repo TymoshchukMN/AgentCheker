@@ -17,8 +17,6 @@ namespace AgentChecker.Mail
 
         private string _headTable =
             @"
-            <p>Titles was chanched for users:<br></p>
-
             <table border='1' align='Left' cellpadding='2' cellspacing='0' style='color:black;font-family:arial,helvetica,sans-serif;text-align:Ledt;'>
             <tr style = 'font-size:12px;font-weight: normal;background: #FFFFFF;background-color: #32CD32;' >
                 <th align = Center>
@@ -73,12 +71,6 @@ namespace AgentChecker.Mail
 
         #region METHODS
 
-        /// <summary>
-        /// Send en email.
-        /// </summary>
-        /// <param name="body">
-        /// Body message.
-        /// </param>
         public void SendMail(string body)
         {
             using
@@ -94,12 +86,6 @@ namespace AgentChecker.Mail
             }
         }
 
-        /// <summary>
-        /// Send en email.
-        /// </summary>
-        /// <param name="body">
-        /// Body message.
-        /// </param>
         public void SendMail()
         {
             using
@@ -117,13 +103,14 @@ namespace AgentChecker.Mail
 
         public void ProcessEmailBody(string serverName, List<PC> pCs)
         {
-            _body += $"{serverName}<br>";
+            _body += $"<p>ПК, которые не подключались к серверу {serverName} " +
+                $"более 14 дней, но доступны по сети<br></p>";
+
             _body += _headTable;
 
             foreach (PC p in pCs)
             {
                 string row = string.Format(
-                       $"" +
                        $"<tr style='font-size:12px;background-color:#FFFFFF'>" +
                        $"  <td>{p.PcName}</td>" +
                        $"  <td>{p.LastConnectionTime}</td>" +
@@ -132,7 +119,7 @@ namespace AgentChecker.Mail
                 _body += row;
             }
 
-            SendMail(_body);
+            _body += "</table><p><br></P>";
         }
 
         #endregion METHODS
