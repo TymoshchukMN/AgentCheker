@@ -35,7 +35,8 @@ namespace AgentChecker
             {
                 directorySearcher = new DirectorySearcher(directoryEntry);
 
-                string ldapPCInform = $"(&(objectCategory=computer)(name={pcName}))";
+                string ldapPCInform = $"(&(objectCategory=computer)" +
+                    $"(name={pcName.Replace(".AKU.COM", string.Empty).Replace(".COMFY.UA", string.Empty)}))";
 
                 directorySearcher.Filter = ldapPCInform;
                 const int PAGE_SIZE = 1000;
@@ -43,10 +44,14 @@ namespace AgentChecker
                 directorySearcher.PropertiesToLoad.Add("OperatingSystem");
                 results = directorySearcher.FindAll();
                 const string ExcludeOS = "Server";
-                string os = results[0].Properties["OperatingSystem"][0].ToString();
-                if (!os.Contains(ExcludeOS))
+
+                if (results.Count > 0)
                 {
-                    isClientOS = true;
+                    string os = results[0].Properties["OperatingSystem"][0].ToString();
+                    if (!os.Contains(ExcludeOS))
+                    {
+                        isClientOS = true;
+                    }
                 }
 
                 directorySearcher.Dispose();

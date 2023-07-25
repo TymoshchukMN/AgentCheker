@@ -10,7 +10,6 @@
     using AgentChecker.Json;
     using AgentChecker.Log;
     using AgentChecker.Mail;
-    using AgentChecker;
     using Newtonsoft.Json;
 
     public class Starter
@@ -50,14 +49,16 @@
                     configJSONdesckCen.DBConfig.Pass),
                 ServerDB.DC);
 
-            List<PC> dcAlldevices = new List<PC>();
+            //List<PC> dcAlldevices = new List<PC>();
+            deskCenDB.GetPC(logger, email);
+            //dcAlldevices = deskCenDB.NotConnectedPC;
+
             LDAP ldap = new LDAP();
-            deskCenDB.GetPC(logger, email, ldap);
-            dcAlldevices = deskCenDB.NotConnectedPC;
 
             List<PC> dcNotConnected =
-                dcAlldevices.Where(x => x.LastConnectionTime <
-                DateTime.Today.AddDays(-14)).ToList();
+                deskCenDB.NotConnectedPC.Skip(1).Where(x =>
+                x.LastConnectionTime < DateTime.Today.AddDays(-14)
+                && ldap.IsClientOS(x.PcName)).ToList();
 
             const string Eset_Conf_File_Path = "N:\\Personal\\TymoshchukMN\\" +
               "AgentCheker\\DBconfigFileEset.json";
@@ -77,9 +78,14 @@
 
             List<PC> esetNotConnected = new List<PC>();
 
-            esetDB.GetPC(logger, email, ldap);
+            esetDB.GetPC(logger, email);
             Checker checker = new Checker();
-            esetNotConnected = esetDB.NotConnectedPC;
+            //esetNotConnected = esetDB.NotConnectedPC;
+
+            esetNotConnected =
+                esetDB.NotConnectedPC.Skip(1).Where(x =>
+                x.LastConnectionTime < DateTime.Today.AddDays(-14)
+                && ldap.IsClientOS(x.PcName)).ToList();
 
             List<PC> dcPingResult = new List<PC>();
             List<PC> esetPingResult = new List<PC>();

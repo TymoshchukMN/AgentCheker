@@ -110,7 +110,7 @@ namespace AgentChecker.DataBase
 
         #endregion PROPERTIES
 
-        public void GetPC(Logger logger, Email email, LDAP ldap)
+        public void GetPC(Logger logger, Email email)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {

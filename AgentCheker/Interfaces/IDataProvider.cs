@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using AgentChecker.DataBase;
-using AgentChecker.Log;
+﻿using AgentChecker.Log;
 using AgentChecker.Mail;
-using AgentChecker;
 
 namespace AgentChecker.Interfaces
 {
@@ -10,7 +7,6 @@ namespace AgentChecker.Interfaces
     {
         void GetPC(
             Logger logger,
-            Email email,
-            LDAP ldap);
+            Email email);
     }
 }
