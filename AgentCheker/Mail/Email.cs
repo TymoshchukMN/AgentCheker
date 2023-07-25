@@ -17,7 +17,7 @@ namespace AgentChecker.Mail
 
         private string _headTable =
             @"
-            <table border='1' align='Left' cellpadding='2' cellspacing='0' style='color:black;font-family:arial,helvetica,sans-serif;text-align:Ledt;'>
+            <table border='1' align='Left' cellpadding='2' cellspacing='0' style='color:black;font-family:arial,helvetica,sans-serif;text-align:Ledt; '>
             <tr style = 'font-size:12px;font-weight: normal;background: #FFFFFF;background-color: #32CD32;' >
                 <th align = Center>
                     <b>
@@ -103,10 +103,11 @@ namespace AgentChecker.Mail
 
         public void ProcessEmailBody(string serverName, List<PC> pCs)
         {
-            _body += $"<p>ПК, которые не подключались к серверу {serverName} " +
-                $"более 14 дней, но доступны по сети<br></p>";
+            _body += $"ПК, которые не подключались к серверу {serverName} " +
+                $"более 14 дней, но доступны по сети<br>";
 
             _body += _headTable;
+            //_body = string.Empty;
 
             foreach (PC p in pCs)
             {
@@ -119,7 +120,7 @@ namespace AgentChecker.Mail
                 _body += row;
             }
 
-            _body += "</table><p><br></P>";
+            _body += "</table>";
         }
 
         #endregion METHODS

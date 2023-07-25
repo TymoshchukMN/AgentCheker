@@ -6,6 +6,7 @@ using System.Net.NetworkInformation;
 using AgentChecker.DataBase;
 using AgentChecker.Log;
 using AgentChecker.Log.Enums;
+using AgentCheker.DataBase;
 using AgentCheker.Interfaces;
 
 namespace AgentChecker
@@ -23,9 +24,11 @@ namespace AgentChecker
                 PingReply reply = pinger.Send(nameOrAddress);
                 pingable = reply.Status == IPStatus.Success;
 
-                string message = $"{DateTime.Now};\t{MessageType.Success}" +
+                string message = $"{DateTime.Now};\t{reply.Status}" +
                                 $": {nameOrAddress}\tping success\t{lasconnect}";
-                UI.PrintLog(message);
+                UI.PrintResPing(message);
+
+                // UI.PrintLog(message);
             }
             catch
             {
@@ -34,6 +37,7 @@ namespace AgentChecker
                 string message = $"{DateTime.Now};\t{MessageType.Error}" +
                                 $": {nameOrAddress}\tCann`t ping host\t{lasconnect}";
                 logger.AddLog(message);
+
                 UI.PrintLog(message);
             }
             finally
@@ -50,18 +54,19 @@ namespace AgentChecker
             ref List<PC> dcPingResult,
             ref List<PC> esetPingResult)
         {
-            Console.WriteLine("=======  DC ==============");
+            UI.PrintBoard("DC");
             dcPingResult = dcPCs.Skip(1).Where((x) =>
             {
                 return PingHost(x.PcName, x.LastConnectionTime);
             }).Select((n) => n).ToList();
 
-            Console.WriteLine("=======  Eset ==============");
-
+            UI.PrintBoard("Eset");
             esetPingResult = esetPCs.Skip(1).Where((x) =>
             {
                 return PingHost(x.PcName, x.LastConnectionTime);
             }).Select((n) => n).ToList();
+
+            // List<Agent> agents = new List<Agent>();
         }
     }
 }

@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checker.cs" />
+    <Compile Include="DataBase\Agent.cs" />
     <Compile Include="DataBase\DateBase.cs" />
     <Compile Include="DataBase\DBConfig.cs" />
     <Compile Include="DataBase\Enums\ServerDB.cs" />
