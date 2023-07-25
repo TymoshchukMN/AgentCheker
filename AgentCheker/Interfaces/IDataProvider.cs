@@ -2,7 +2,7 @@
 using AgentChecker.DataBase;
 using AgentChecker.Log;
 using AgentChecker.Mail;
-using FiredProcessing;
+using AgentChecker;
 
 namespace AgentChecker.Interfaces
 {

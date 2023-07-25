@@ -10,6 +10,8 @@ namespace AgentChecker
     {
         public static void Main(string[] args)
         {
+            LDAP lDAP = new LDAP();
+            lDAP.IsClientOS("TYMOSHCHUKMN");
             Starter.Run();
         }
     }

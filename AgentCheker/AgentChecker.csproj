@@ -196,6 +196,7 @@
     <Compile Include="DataBase\PC.cs" />
     <Compile Include="Interfaces\IChecker.cs" />
     <Compile Include="Interfaces\IDataProvider.cs" />
+    <Compile Include="Interfaces\IisClientOS.cs" />
     <Compile Include="JSON\LoggerConfig.cs" />
     <Compile Include="LDAP\LDAP.cs" />
     <Compile Include="Log\DateProvider\FileService.cs" />

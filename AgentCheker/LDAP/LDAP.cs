@@ -1,8 +1,9 @@
-﻿namespace FiredProcessing
-{
-    using System.DirectoryServices;
+﻿using System.DirectoryServices;
+using AgentCheker.Interfaces;
 
-    public class LDAP
+namespace AgentChecker
+{
+    public class LDAP : IisClientOS
     {
         #region FIELDS
 
@@ -24,10 +25,11 @@
 
         #region METHODS
 
-        public void GetPCinform(string pcName)
+        public bool IsClientOS(string pcName)
         {
             SearchResultCollection results;
             DirectorySearcher directorySearcher;
+            bool isClientOS = false;
 
             using (DirectoryEntry directoryEntry = new DirectoryEntry(_domainName))
             {
@@ -38,20 +40,22 @@
                 directorySearcher.Filter = ldapPCInform;
                 const int PAGE_SIZE = 1000;
                 directorySearcher.PageSize = PAGE_SIZE;
-                directorySearcher.PropertiesToLoad.Add("sAMAccountName");
+                directorySearcher.PropertiesToLoad.Add("OperatingSystem");
                 results = directorySearcher.FindAll();
-
-                foreach (SearchResult sr in results)
+                const string ExcludeOS = "Server";
+                string os = results[0].Properties["OperatingSystem"][0].ToString();
+                if (!os.Contains(ExcludeOS))
                 {
-                        string.Format($"{sr.Properties["OperatingSystem"][0]}");
+                    isClientOS = true;
                 }
 
                 directorySearcher.Dispose();
+                return isClientOS;
             }
         }
 
         /// <summary>
-        /// Ger root domain.
+        /// Get root domain.
         /// </summary>
         /// <returns>
         /// Domain name.
@@ -60,7 +64,7 @@
         {
             DirectoryEntry de = new DirectoryEntry("LDAP://RootDSE");
 
-            return "LDAP://OU=Trash," + de.Properties["defaultNamingContext"][0].ToString();
+            return "LDAP://" + de.Properties["defaultNamingContext"][0].ToString();
         }
 
         #endregion METHODS

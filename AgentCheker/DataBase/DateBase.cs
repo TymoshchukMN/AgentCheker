@@ -7,7 +7,6 @@ using AgentChecker.Interfaces;
 using AgentChecker.Log;
 using AgentChecker.Log.Enums;
 using AgentChecker.Mail;
-using FiredProcessing;
 
 namespace AgentChecker.DataBase
 {
