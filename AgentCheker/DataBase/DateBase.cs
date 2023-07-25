@@ -7,6 +7,7 @@ using AgentChecker.Interfaces;
 using AgentChecker.Log;
 using AgentChecker.Log.Enums;
 using AgentChecker.Mail;
+using FiredProcessing;
 
 namespace AgentChecker.DataBase
 {
@@ -110,7 +111,7 @@ namespace AgentChecker.DataBase
 
         #endregion PROPERTIES
 
-        public void GetPC(Logger logger, Email email)
+        public void GetPC(Logger logger, Email email, LDAP ldap)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {

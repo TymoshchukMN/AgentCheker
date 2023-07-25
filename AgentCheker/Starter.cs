@@ -10,6 +10,7 @@
     using AgentChecker.Json;
     using AgentChecker.Log;
     using AgentChecker.Mail;
+    using FiredProcessing;
     using Newtonsoft.Json;
 
     public class Starter
@@ -50,7 +51,8 @@
                 ServerDB.DC);
 
             List<PC> dcAlldevices = new List<PC>();
-            deskCenDB.GetPC(logger, email);
+            LDAP ldap = new LDAP();
+            deskCenDB.GetPC(logger, email, ldap);
             dcAlldevices = deskCenDB.NotConnectedPC;
 
             List<PC> dcNotConnected =
@@ -75,7 +77,7 @@
 
             List<PC> esetNotConnected = new List<PC>();
 
-            esetDB.GetPC(logger, email);
+            esetDB.GetPC(logger, email, ldap);
             Checker checker = new Checker();
             esetNotConnected = esetDB.NotConnectedPC;
 

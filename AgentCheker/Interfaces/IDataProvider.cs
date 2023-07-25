@@ -2,6 +2,7 @@
 using AgentChecker.DataBase;
 using AgentChecker.Log;
 using AgentChecker.Mail;
+using FiredProcessing;
 
 namespace AgentChecker.Interfaces
 {
@@ -9,6 +10,7 @@ namespace AgentChecker.Interfaces
     {
         void GetPC(
             Logger logger,
-            Email email);
+            Email email,
+            LDAP ldap);
     }
 }
