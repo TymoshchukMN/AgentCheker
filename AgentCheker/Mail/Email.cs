@@ -107,8 +107,8 @@ namespace AgentChecker.Mail
                 $"более 14 дней, но доступны по сети<br>";
 
             _body += _headTable;
-            //_body = string.Empty;
 
+            ushort count = 3;
             foreach (PC p in pCs)
             {
                 string row = string.Format(
@@ -118,9 +118,15 @@ namespace AgentChecker.Mail
                        $"</tr > ");
 
                 _body += row;
+                ++count;
             }
 
             _body += "</table>";
+
+            for (int i = 0; i < count; i++)
+            {
+                _body += "<br>";
+            }
         }
 
         #endregion METHODS

@@ -6,7 +6,6 @@ using System.Net.NetworkInformation;
 using AgentChecker.DataBase;
 using AgentChecker.Log;
 using AgentChecker.Log.Enums;
-using AgentCheker.DataBase;
 using AgentCheker.Interfaces;
 
 namespace AgentChecker
@@ -24,9 +23,10 @@ namespace AgentChecker
                 PingReply reply = pinger.Send(nameOrAddress);
                 pingable = reply.Status == IPStatus.Success;
 
-                string message = $"{DateTime.Now};\t{reply.Status}" +
-                                $": {nameOrAddress}\tping success\t{lasconnect}";
-                UI.PrintResPing(message);
+                IPStatus status = reply.Status;
+                string message = $"{reply.Status};" +
+                                $"{nameOrAddress};{lasconnect};";
+                UI.PrintLog(message, reply.Status);
 
                 // UI.PrintLog(message);
             }
@@ -34,11 +34,10 @@ namespace AgentChecker
             {
                 Logger logger = Logger.GetInstatce();
 
-                string message = $"{DateTime.Now};\t{MessageType.Error}" +
-                                $": {nameOrAddress}\tCann`t ping host\t{lasconnect}";
+                string message = $"{MessageType.Error};" +
+                                $"{nameOrAddress};{lasconnect}";
                 logger.AddLog(message);
-
-                UI.PrintLog(message);
+                UI.PrintErrPing(message);
             }
             finally
             {

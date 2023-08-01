@@ -6,60 +6,56 @@ namespace AgentChecker
 {
     internal class UI
     {
-        public static void PrintLog(string log)
+        public static void PrintLog(string log, IPStatus status)
         {
-            Console.Write($"{log.Split(';')[0]}\t");
+            string messageType = log.Split(';')[0];
+            string pcName = log.Split(';')[1].Replace(".AKU.COM", string.Empty);
+            string lastConnTime = log.Split(';')[2];
 
             MessageType ms = (MessageType)Enum.Parse(
-                typeof(MessageType),
-                log.Split(';')[1].Split(':')[0]);
+                typeof(MessageType), messageType);
 
             switch (ms)
             {
                 case MessageType.Error:
-                    ChangeColor("Error\t\t", ConsoleColor.Red);
+                    ChangeColor(messageType, ConsoleColor.Red);
                     break;
                 case MessageType.Info:
-                    ChangeColor("Info", ConsoleColor.Cyan);
+                    ChangeColor(messageType, ConsoleColor.Cyan);
                     break;
                 case MessageType.Warning:
-                    ChangeColor("Warning", ConsoleColor.Yellow);
+                    ChangeColor(messageType, ConsoleColor.Yellow);
                     break;
                 case MessageType.Success:
-                    ChangeColor("Success", ConsoleColor.Green);
+                    ChangeColor(messageType, ConsoleColor.Green);
                     break;
             }
 
-            Console.WriteLine(
-                $"{log.Split(';')[1].Substring(log.Split(';')[1].IndexOf(':'))}");
+            Console.Write($"\t{pcName}");
+
+            if (status == IPStatus.Success)
+            {
+                Console.Write("\t");
+                ChangeColor(messageType, ConsoleColor.Green);
+            }
+            else
+            {
+                Console.Write($"\t{status}");
+            }
+
+            Console.WriteLine($"\t\t\t{lastConnTime}");
         }
 
-        public static void PrintResPing(string log)
+        public static void PrintErrPing(string log)
         {
-            Console.Write($"{log.Split(';')[0]}\t");
+            string messageType = log.Split(';')[0];
+            string pcName = log.Split(';')[1].Replace(".AKU.COM", string.Empty);
+            string lastConnTime = log.Split(';')[2];
 
-            IPStatus ms = (IPStatus)Enum.Parse(
-                typeof(IPStatus),
-                log.Split(';')[1].Split(':')[0]);
+            ChangeColor(messageType, ConsoleColor.Red);
 
-            switch (ms)
-            {
-                case IPStatus.Success:
-                    ChangeColor("Success\t\t", ConsoleColor.Green);
-                    break;
-                case IPStatus.DestinationHostUnreachable:
-                    ChangeColor("Unreachable", ConsoleColor.Red);
-                    break;
-                case IPStatus.TimedOut:
-                    ChangeColor("TimedOut", ConsoleColor.Red);
-                    break;
-                default:
-                    ChangeColor($"{ms}", ConsoleColor.Red);
-                    break;
-            }
-
-            Console.WriteLine(
-                $"{log.Split(';')[1].Substring(log.Split(';')[1].IndexOf(':'))}");
+            const string ErrMessage = "Doesn't exist in DNS";
+            Console.WriteLine($"\t{pcName}\t{ErrMessage}\t{lastConnTime}");
         }
 
         public static void PrintBoard(string system)
