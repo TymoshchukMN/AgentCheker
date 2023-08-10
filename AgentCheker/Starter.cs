@@ -49,9 +49,7 @@
                     configJSONdesckCen.DBConfig.Pass),
                 ServerDB.DC);
 
-            //List<PC> dcAlldevices = new List<PC>();
             deskCenDB.GetPC(logger, email);
-            //dcAlldevices = deskCenDB.NotConnectedPC;
 
             LDAP ldap = new LDAP();
 
@@ -80,7 +78,6 @@
 
             esetDB.GetPC(logger, email);
             Checker checker = new Checker();
-            //esetNotConnected = esetDB.NotConnectedPC;
 
             esetNotConnected =
                 esetDB.NotConnectedPC.Skip(1).Where(x =>
@@ -99,8 +96,6 @@
             email.ProcessEmailBody(deskCenDB.ServerName, dcPingResult);
             email.ProcessEmailBody(esetDB.ServerName, esetPingResult);
             email.SendMail();
-
-            Console.ReadLine();
         }
     }
 }
