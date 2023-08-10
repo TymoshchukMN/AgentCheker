@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -27,8 +26,6 @@ namespace AgentChecker
                 string message = $"{reply.Status};" +
                                 $"{nameOrAddress};{lasconnect};";
                 UI.PrintLog(message, reply.Status);
-
-                // UI.PrintLog(message);
             }
             catch
             {
